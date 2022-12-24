@@ -75,6 +75,7 @@ body {
 
 .game__turn {
     font-size: 46px;
+    color: blue;
 }
 
 .game__board {

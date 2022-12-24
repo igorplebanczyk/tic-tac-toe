@@ -69,9 +69,11 @@ game__board__element.forEach(item => {
         if (checkForWin(board)) {
             game__board__element.forEach(item => item.disabled = true)
             game__turn.innerHTML = `Player ${(counter - 1) % 2 + 1} wins`;
+            game__turn.style.color = ((counter - 1) % 2 + 1) === 1 ? "blue" : "red";
         } else {
             item.disabled = true;
             game__turn.innerHTML = `Player ${counter % 2 + 1}'s turn`;
+            game__turn.style.color = (counter % 2 + 1) === 1 ? "blue" : "red";
         }
        
     }); 
