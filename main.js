@@ -1,7 +1,18 @@
 const start = document.querySelector(".start");
 const start__button = document.querySelector(".start__button");
+
+start__button.addEventListener("click", () => {
+    start.setAttribute("style", "height: 15vh")
+    start__button.remove();
+    game.setAttribute("style", "visibility: visible");
+});
+
 const game = document.querySelector(".game");
+const game__turn = document.querySelector(".game__turn");
 const game__board__element = document.querySelectorAll(".game__board__element");
+
+let counter = 0;
+let board = new Array(9).fill(null);
 
 function createDiv(parentElement, classAttribute) {
     const element = document.createElement("div");
@@ -26,46 +37,42 @@ function checkForWin(board) {
         const [a, b, c] = combinations[i];
 
         if ((board[a] === board[b] && board[b] === board[c]) && (board[a] === 0 || board[a] === 1)) {
-            console.log(`Player ${board[a] + 1} wins!`);
+            game__turn.innerHTML = `Player ${board[a] + 1} wins!`;
             won = true;
         }
     }
 
     if (!board.includes(null) && won === false) {
-        console.log("Draw!");
+        game__turn.innerHTML = "Draw!";
         won = true;
     }
 
     return won;
 }
 
-start__button.addEventListener("click", () => {
-    start.setAttribute("style", "height: 18vh")
-    start__button.remove();
-    game.setAttribute("style", "visibility: visible");
-});
-
-let counter = 0;
-let board = new Array(9).fill(null);
-
 game__board__element.forEach(item => {
     item.addEventListener("click", () => {
         if (counter % 2 == 0) {
-            for (let i = 0; i < 2; i++) {
-                createDiv(item, "game__board__element__circle");
-            }
-    
+            createDiv(item, "game__board__element__circle");
+            createDiv(item, "game__board__element__circle");
+
             board[item.id] = 0;
             counter++;
         } else {
-            for (let i = 0; i < 2; i++) {
-                createDiv(item, "game__board__element__cross");
-            }
-    
+            createDiv(item, "game__board__element__cross");
+            createDiv(item, "game__board__element__cross");
+        
             board[item.id] = 1;
             counter++;
         }
         
-        checkForWin(board) ? game__board__element.forEach(item => item.disabled = true) : item.disabled = true;
-    })
+        if (checkForWin(board)) {
+            game__board__element.forEach(item => item.disabled = true)
+            game__turn.innerHTML = `Player ${(counter - 1) % 2 + 1} wins`;
+        } else {
+            item.disabled = true;
+            game__turn.innerHTML = `Player ${counter % 2 + 1}'s turn`;
+        }
+       
+    }); 
 });
