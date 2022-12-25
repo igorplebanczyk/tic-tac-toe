@@ -33,7 +33,7 @@ body {
     font-weight: 500;
 }
 
-.start__button {
+.button {
     width: 12rem;
     height: 4rem;
 
@@ -47,16 +47,16 @@ body {
     justify-content: center;
 }
 
-.start__button:hover {
+.button:hover {
     background: #fc873e;
 }
 
-.start__button:active {
+.button:active {
     background: #f7701d;
 }
 
-.start__button__text {
-    font-size: 28px;
+.button__text {
+    font-size: 2.5rem;
     color: rgba(255, 255, 255, 0.88);
 }
 
@@ -153,11 +153,11 @@ body {
 
 @media screen and (min-width: 320px) {
     * {
-        font-size: 9.25px;
+        font-size: 8.65px;
     }
 
     .start__title {
-        font-size: 60px;
+        font-size: 52px;
     }
 
     
