@@ -62,59 +62,51 @@ function drawWinningLine() {
     const lineElement = document.createElement('div');
     lineElement.classList.add('winning-line');
 
-    const [start, middle, end] = winningCombo;
     const cellSize = 100; // px
     const cellGap = 5; // px
-    const lineThickness = 5; // px
-    const boardSize = 3 * cellSize + 2 * cellGap;
+    const lineThickness = 2; // px
+    const boardSize = 3 * cellSize + 2 * cellGap; // Total board size
 
-    // Check the winning combination directly
     if (winningCombo.toString() === [0, 1, 2].toString() || 
         winningCombo.toString() === [3, 4, 5].toString() || 
         winningCombo.toString() === [6, 7, 8].toString()) {
         // Horizontal line
-        lineElement.classList.add('horizontal');
-        lineElement.style.top = `${Math.floor(start / 3) * (cellSize + cellGap) + cellSize / 2 - lineThickness / 2}px`;
-        lineElement.style.left = '0'; // start from the left
         lineElement.style.width = `${boardSize}px`;
+        lineElement.style.height = `${lineThickness}px`;
+        lineElement.style.left = '0';
+        lineElement.style.top = `${Math.floor(winningCombo[0] / 3) * (cellSize + cellGap) + cellSize / 2 - lineThickness / 2}px`;
     } else if (winningCombo.toString() === [0, 3, 6].toString() || 
                winningCombo.toString() === [1, 4, 7].toString() || 
                winningCombo.toString() === [2, 5, 8].toString()) {
         // Vertical line
-        lineElement.classList.add('vertical');
-        lineElement.style.left = `${(start % 3) * (cellSize + cellGap) + cellSize / 2 - lineThickness / 2}px`;
-        lineElement.style.top = '0'; // start from the top
+        lineElement.style.width = `${lineThickness}px`;
         lineElement.style.height = `${boardSize}px`;
+        lineElement.style.left = `${(winningCombo[0] % 3) * (cellSize + cellGap) + cellSize / 2 - lineThickness / 2}px`;
+        lineElement.style.top = '0';
     } else if (winningCombo.toString() === [0, 4, 8].toString()) {
         // Diagonal from top-left to bottom-right
-        lineElement.classList.add('diagonal-1');
-        lineElement.style.width = `${Math.sqrt(2) * boardSize}px`; // Diagonal length
+        const diagonalLength = Math.sqrt(2) * boardSize;
+        lineElement.style.width = `${diagonalLength}px`;
+        lineElement.style.height = `${lineThickness}px`;
+        lineElement.style.left = '0';
+        lineElement.style.top = '0';
+        lineElement.style.transformOrigin = 'top left';
         lineElement.style.transform = `rotate(45deg)`;
-        lineElement.style.top = `${cellGap}px`; // Adjust top position for rotation
-        lineElement.style.left = `${cellGap}px`; // Adjust left position for rotation
     } else if (winningCombo.toString() === [2, 4, 6].toString()) {
         // Diagonal from top-right to bottom-left
-        lineElement.classList.add('diagonal-2');
-        lineElement.style.width = `${Math.sqrt(2) * boardSize}px`; // Diagonal length
+        const diagonalLength = Math.sqrt(2) * boardSize;
+        lineElement.style.width = `${diagonalLength}px`;
+        lineElement.style.height = `${lineThickness}px`;
+        lineElement.style.right = '0';
+        lineElement.style.top = '0';
+        lineElement.style.transformOrigin = 'top right';
         lineElement.style.transform = `rotate(-45deg)`;
-        lineElement.style.top = `${cellGap}px`; // Adjust top position for rotation
-        lineElement.style.left = `${boardSize - (cellSize + cellGap) - lineThickness + cellGap}px`; // Correct left position
     }
 
     board.appendChild(lineElement);
-
-    // Trigger reflow to ensure the transition works
-    lineElement.offsetWidth;
-
-    // Set the final dimensions for the winning line
-    if (lineElement.classList.contains('horizontal')) {
-        lineElement.style.width = `${boardSize}px`;
-    } else if (lineElement.classList.contains('vertical')) {
-        lineElement.style.height = `${boardSize}px`;
-    } else {
-        lineElement.style.width = `${Math.sqrt(2) * boardSize}px`;
-    }
 }
+
+
 
 function restartGame() {
     currentPlayer = 'X';

@@ -24,7 +24,7 @@ h1 {
     margin-bottom: 20px;
     position: relative;
     width: 310px;
-    height: 310px;
+    height: 310px;  
 }
 
 .cell {
@@ -37,9 +37,8 @@ h1 {
     justify-content: center;
     align-items: center;
     cursor: pointer;
-    box-sizing: border-box; /* Include borders in width and height calculations */
+    box-sizing: border-box;
 }
-
 
 .cell:hover {
     background-color: #f5f5f5;
@@ -59,7 +58,7 @@ button {
 .winning-line {
     position: absolute;
     background-color: #ff0000;
-    transition: width 0.5s ease-in-out, height 0.5s ease-in-out, transform 0.5s ease-in-out;
+    transition: all 0.3s ease;
 }
 
 .winning-line.horizontal {
@@ -81,4 +80,5 @@ button {
     top: 0;
     left: 0;
     transform-origin: 0 0; /* Ensure the transform origin is set to the top-left corner */
+    border-radius: 25%;
 }
