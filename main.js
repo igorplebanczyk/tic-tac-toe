@@ -1,91 +1,140 @@
-const start = document.querySelector(".start");
-const startButton = document.querySelector(".button");
+const board = document.getElementById('board');
+const cells = document.querySelectorAll('[data-cell]');
+const message = document.getElementById('message');
+const restartButton = document.getElementById('restartButton');
 
-const game = document.querySelector(".game");
-const game__turn = document.querySelector(".game__turn");
-const game__board = document.querySelector(".game__board");
-const game__board__element = document.querySelectorAll(".game__board__element");
+let currentPlayer = 'X';
+let gameActive = true;
+let gameState = ['', '', '', '', '', '', '', '', ''];
 
-let counter = 0;
-let board = new Array(9).fill(null);
+const winningCombinations = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6]
+];
 
-startButton.addEventListener("click", () => {
-    start.setAttribute("style", "height: 15vh")
-    startButton.remove();
-    game.setAttribute("style", "visibility: visible");
-});
+function handleCellClick(e) {
+    const cell = e.target;
+    const cellIndex = Array.from(cells).indexOf(cell);
 
-function createDiv(parentElement, classAttribute) {
-    const element = document.createElement("div");
-    element.setAttribute("class", classAttribute);
-    parentElement.append(element);
+    if (gameState[cellIndex] !== '' || !gameActive) return;
+
+    gameState[cellIndex] = currentPlayer;
+    cell.textContent = currentPlayer;
+
+    if (checkWin()) {
+        gameActive = false;
+        message.textContent = `Player ${currentPlayer} wins!`;
+        drawWinningLine();
+    } else if (checkDraw()) {
+        gameActive = false;
+        message.textContent = "It's a draw!";
+    } else {
+        currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+        message.textContent = `Player ${currentPlayer}'s turn`;
+    }
 }
 
-function checkForWin(board) {
-    let won = false;
-    const combinations = [        
-        [0, 1, 2],
-        [3, 4, 5],
-        [6, 7, 8],
-        [0, 3, 6],
-        [1, 4, 7],
-        [2, 5, 8],
-        [0, 4, 8],
-        [2, 4, 6]
-    ];
-
-    for (i of combinations) {
-        const [a, b, c] = i;
-
-        if ((board[a] === board[b] && board[b] === board[c]) && (board[a] === 0 || board[a] === 1)) {
-            game__turn.innerHTML = `Player ${board[a] + 1} wins!`;
-            won = true;
-        }
-    }
-
-    if (!board.includes(null) && won === false) {
-        game__turn.innerHTML = "Draw!";
-        won = true;
-    }
-
-    return won;
+function checkWin() {
+    return winningCombinations.some(combination => {
+        return combination.every(index => {
+            return gameState[index] === currentPlayer;
+        });
+    });
 }
 
-game__board__element.forEach(item => {
-    item.addEventListener("click", () => {
-        if (counter % 2 == 0) {
-            createDiv(item, "game__board__element__circle");
-            createDiv(item, "game__board__element__circle");
+function checkDraw() {
+    return gameState.every(cell => cell !== '');
+}
 
-            board[item.id] = 0;
-            counter++;
-        } else {
-            createDiv(item, "game__board__element__cross");
-            createDiv(item, "game__board__element__cross");
-        
-            board[item.id] = 1;
-            counter++;
-        }
-        
-        if (checkForWin(board)) {
-            const restartButton = document.createElement("button");
-            const restartButtonText = document.createElement("span");
-            
-            game__board.remove();
-            game__turn.innerHTML = `Player ${(counter - 1) % 2 + 1} wins`;
-            game__turn.style.color = ((counter - 1) % 2 + 1) === 1 ? "blue" : "red";
+function drawWinningLine() {
+    const winningCombo = winningCombinations.find(combination => {
+        return combination.every(index => gameState[index] === currentPlayer);
+    });
 
-            restartButton.setAttribute("class", "button");
-            restartButton.addEventListener("click", () => { location.reload() });
-            restartButtonText.setAttribute("class", "button__text");
-            restartButtonText.innerHTML = "Restart";
+    if (!winningCombo) return;
 
-            restartButton.append(restartButtonText);
-            game.append(restartButton);
-        } else {
-            item.disabled = true;
-            game__turn.innerHTML = `Player ${counter % 2 + 1}'s turn`;
-            game__turn.style.color = (counter % 2 + 1) === 1 ? "blue" : "red";
-        }
-    }); 
+    const lineElement = document.createElement('div');
+    lineElement.classList.add('winning-line');
+
+    const [start, middle, end] = winningCombo;
+    const cellSize = 100; // px
+    const cellGap = 5; // px
+    const lineThickness = 5; // px
+    const boardSize = 3 * cellSize + 2 * cellGap;
+
+    if (start % 3 === 0 && end % 3 === 2) {
+        // Horizontal line
+        lineElement.classList.add('horizontal');
+        lineElement.style.top = `${Math.floor(start / 3) * (cellSize + cellGap) + cellSize / 2 - lineThickness / 2}px`;
+        lineElement.style.left = '0'; // start from the left
+        lineElement.style.width = `${boardSize}px`;
+    } else if (start < 3 && end > 5) {
+        // Vertical line
+        lineElement.classList.add('vertical');
+        lineElement.style.left = `${(start % 3) * (cellSize + cellGap) + cellSize / 2 - lineThickness / 2}px`;
+        lineElement.style.top = '0'; // start from the top
+        lineElement.style.height = `${boardSize}px`;
+    } else if (start === 0 && end === 8) {
+        // Diagonal from top-left to bottom-right
+        lineElement.classList.add('diagonal-1');
+        lineElement.style.width = `${Math.sqrt(2) * boardSize}px`; // Diagonal length
+        lineElement.style.transform = `rotate(45deg)`;
+        lineElement.style.transformOrigin = '0 0'; // Ensure the transform origin is set to the top-left corner
+        lineElement.style.top = `${cellGap}px`; // Adjust top position for rotation
+        lineElement.style.left = `${cellGap}px`; // Adjust left position for rotation
+    } else if (start === 2 && end === 6) {
+        // Diagonal from top-right to bottom-left
+        lineElement.classList.add('diagonal-2');
+        lineElement.style.width = `${Math.sqrt(2) * boardSize}px`; // Diagonal length
+        lineElement.style.transform = `rotate(-45deg)`;
+        lineElement.style.transformOrigin = '0 0'; // Ensure the transform origin is set to the top-left corner
+        lineElement.style.top = `${cellGap}px`; // Adjust top position for rotation
+        lineElement.style.left = `${boardSize - (cellSize + cellGap) - lineThickness}px`; // Correct left position
+    }
+
+    board.appendChild(lineElement);
+
+    // Trigger reflow to ensure the transition works
+    lineElement.offsetWidth;
+
+    // Set the final dimensions for the winning line
+    if (lineElement.classList.contains('horizontal')) {
+        lineElement.style.width = `${boardSize}px`;
+    } else if (lineElement.classList.contains('vertical')) {
+        lineElement.style.height = `${boardSize}px`;
+    } else {
+        lineElement.style.width = `${Math.sqrt(2) * boardSize}px`;
+    }
+}
+
+
+
+
+function restartGame() {
+    currentPlayer = 'X';
+    gameActive = true;
+    gameState = ['', '', '', '', '', '', '', '', ''];
+    message.textContent = `Player ${currentPlayer}'s turn`;
+    cells.forEach(cell => {
+        cell.textContent = '';
+    });
+    const winningLine = document.querySelector('.winning-line');
+    if (winningLine) {
+        winningLine.remove();
+    }
+}
+
+cells.forEach(cell => {
+    cell.addEventListener('click', handleCellClick);
 });
+
+restartButton.addEventListener('click', restartGame);
+
+// Initialize the game
+message.textContent = `Player ${currentPlayer}'s turn`;

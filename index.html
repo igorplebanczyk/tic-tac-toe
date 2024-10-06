@@ -2,30 +2,27 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="style.css" rel="stylesheet">
-    <script src="main.js" defer></script>
-    <title>Tic Tac Toe</title>
+    <title>Tic-Tac-Toe</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <section class="start">
-        <h1 class="start__title">Tic Tac Toe</h1>
-        <button class="button"><span class="button__text">Start</span></button>
-    </section>
-    <section class="game">
-        <h2 class="game__turn">Player 1's turn</h2>
-        <div class="game__board">
-            <button class="game__board__element" id="0"></button>
-            <button class="game__board__element" id="1"></button>
-            <button class="game__board__element" id="2"></button>
-            <button class="game__board__element" id="3"></button>
-            <button class="game__board__element" id="4"></button>
-            <button class="game__board__element" id="5"></button>
-            <button class="game__board__element" id="6"></button>
-            <button class="game__board__element" id="7"></button>
-            <button class="game__board__element" id="8"></button>
+    <div class="container">
+        <h1>Tic-Tac-Toe</h1>
+        <div id="board" class="board">
+            <div class="cell" data-cell></div>
+            <div class="cell" data-cell></div>
+            <div class="cell" data-cell></div>
+            <div class="cell" data-cell></div>
+            <div class="cell" data-cell></div>
+            <div class="cell" data-cell></div>
+            <div class="cell" data-cell></div>
+            <div class="cell" data-cell></div>
+            <div class="cell" data-cell></div>
         </div>
-    </section>
+        <div id="message" class="message"></div>
+        <button id="restartButton">Restart Game</button>
+    </div>
+    <script src="main.js"></script>
 </body>
 </html>
