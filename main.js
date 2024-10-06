@@ -66,6 +66,7 @@ function drawWinningLine() {
     const cellGap = 5; // px
     const lineThickness = 2; // px
     const boardSize = 3 * cellSize + 2 * cellGap; // Total board size
+    const diagonalLength = Math.sqrt(2) * boardSize - 2;
 
     if (winningCombo.toString() === [0, 1, 2].toString() || 
         winningCombo.toString() === [3, 4, 5].toString() || 
@@ -85,19 +86,17 @@ function drawWinningLine() {
         lineElement.style.top = '0';
     } else if (winningCombo.toString() === [0, 4, 8].toString()) {
         // Diagonal from top-left to bottom-right
-        const diagonalLength = Math.sqrt(2) * boardSize;
         lineElement.style.width = `${diagonalLength}px`;
         lineElement.style.height = `${lineThickness}px`;
-        lineElement.style.left = '0';
+        lineElement.style.left = '1px';
         lineElement.style.top = '0';
         lineElement.style.transformOrigin = 'top left';
         lineElement.style.transform = `rotate(45deg)`;
     } else if (winningCombo.toString() === [2, 4, 6].toString()) {
         // Diagonal from top-right to bottom-left
-        const diagonalLength = Math.sqrt(2) * boardSize;
         lineElement.style.width = `${diagonalLength}px`;
         lineElement.style.height = `${lineThickness}px`;
-        lineElement.style.right = '0';
+        lineElement.style.right = '1px';
         lineElement.style.top = '0';
         lineElement.style.transformOrigin = 'top right';
         lineElement.style.transform = `rotate(-45deg)`;
