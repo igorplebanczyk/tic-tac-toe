@@ -52,7 +52,13 @@ h1 {
 button {
     font-size: 18px;
     padding: 10px 20px;
-    cursor: pointer;
+    background-color: #f0f0f0;
+    border: 1.5px solid #333;
+    border-radius: 5px;
+}
+
+button:hover {
+    background-color: #e0e0e0;
 }
 
 .winning-line {
