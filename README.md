@@ -1,8 +1,16 @@
 # Tic Tac Toe
 
-* Simple online Tic Tac Toe game with a minimal UI.
-* Adheres to standard Tic Tac Toe rules.
-* Check it out on GitHub pages.
+Simple online Tic Tac Toe game, built with vanilla HTML, CSS and JavaScript.
+
+## Features
+
+* Features a minimal UI
+* Should work on all major screen sizes
+* Frontend only, hosted on GitHub Pages.
+
+## Usage
+
+Check it out [here](igorplebanczyk.github.io/tic-tac-toe/).
 
 ## Notes
 
